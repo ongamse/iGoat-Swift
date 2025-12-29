@@ -10,7 +10,7 @@
 #import "SVProgressHUD.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import <sqlite3.h>
-#import <CouchbaseLite/CouchbaseLite.h>
+// #import <CouchbaseLite/CouchbaseLite.h>  // Disabled - use CocoaPods if needed
 //#import <Realm/Realm.h>
 #import <YapDatabase/YapDatabase.h>
 

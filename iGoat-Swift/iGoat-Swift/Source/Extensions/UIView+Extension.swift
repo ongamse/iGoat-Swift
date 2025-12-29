@@ -11,12 +11,12 @@ extension UIView {
     }
     
     /// Nib Name for the cell
-    open class var nibName: String {
+    public class var nibName: String {
         return "\(self.self)"
     }
-    
+
     /// NSBundle to fetch the nib resource from
-    open class var nibBundle: Bundle {
+    public class var nibBundle: Bundle {
         return Bundle(for: self.self)
     }
 }

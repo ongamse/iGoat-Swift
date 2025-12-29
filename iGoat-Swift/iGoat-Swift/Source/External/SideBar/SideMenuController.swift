@@ -23,7 +23,7 @@
 
 import UIKit
 
-public protocol SideMenuControllerDelegate: class {
+public protocol SideMenuControllerDelegate: AnyObject {
     func sideMenuControllerDidHide(_ sideMenuController: SideMenuController)
     func sideMenuControllerDidReveal(_ sideMenuController: SideMenuController)
 }
@@ -73,9 +73,9 @@ public extension SideMenuController {
             sideViewController.view.frame = sidePanel.bounds
             
             sidePanel.addSubview(sideViewController.view)
-            
-            addChildViewController(sideViewController)
-            sideViewController.didMove(toParentViewController: self)
+
+            addChild(sideViewController)
+            sideViewController.didMove(toParent: self)
             
             sidePanel.isHidden = true
         }
@@ -100,8 +100,8 @@ public extension SideMenuController {
         if let id = cacheIdentifier {
             controllersCache[id] = controller
         }
-        
-        addChildViewController(controller)
+
+        addChild(controller)
         if let controller = controller as? UINavigationController {
             prepare(centerControllerForContainment: controller)
         }
@@ -109,14 +109,14 @@ public extension SideMenuController {
         
         if centerViewController == nil {
             centerViewController = controller
-            centerViewController.didMove(toParentViewController: self)
+            centerViewController.didMove(toParent: self)
         } else {
-            centerViewController.willMove(toParentViewController: nil)
-            
+            centerViewController.willMove(toParent: nil)
+
             let completion: () -> () = {
                 self.centerViewController.view.removeFromSuperview()
-                self.centerViewController.removeFromParentViewController()
-                controller.didMove(toParentViewController: self)
+                self.centerViewController.removeFromParent()
+                controller.didMove(toParent: self)
                 self.centerViewController = controller
             }
             
@@ -140,7 +140,7 @@ open class SideMenuController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: Public
     
     open weak var delegate: SideMenuControllerDelegate?
-    open static var preferences: Preferences = Preferences()
+    public static var preferences: Preferences = Preferences()
     internal(set) open var sidePanelVisible = false
     
     // MARK: Internal
@@ -192,7 +192,7 @@ open class SideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(SideMenuController.repositionViews), name: .UIApplicationWillChangeStatusBarFrame, object: UIApplication.shared)
+        NotificationCenter.default.addObserver(self, selector: #selector(SideMenuController.repositionViews), name: UIApplication.willChangeStatusBarFrameNotification, object: UIApplication.shared)
     }
     
     override open func viewWillDisappear(_ animated: Bool) {
@@ -252,15 +252,15 @@ open class SideMenuController: UIViewController, UIGestureRecognizerDelegate {
         sidePanel.clipsToBounds = true
         
         if sidePanelPosition.isPositionedUnder {
-            view.sendSubview(toBack: sidePanel)
+            view.sendSubviewToBack(sidePanel)
         } else {
             centerPanelOverlay = UIView(frame: centerPanel.frame)
             centerPanelOverlay.backgroundColor = _preferences.drawing.centerPanelOverlayColor
-            view.bringSubview(toFront: sidePanel)
+            view.bringSubviewToFront(sidePanel)
         }
-        
+
         configureGestureRecognizers()
-        view.bringSubview(toFront: statusBarUnderlay)
+        view.bringSubviewToFront(statusBarUnderlay)
     }
     
     func configureGestureRecognizers() {

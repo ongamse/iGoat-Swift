@@ -23,9 +23,9 @@ extension ExerciseDemoVC {
         let viewController = ViewController.init(nibName: exercise.viewControllerIdentifier, bundle: nil)
         let view = viewController.view
         view?.translatesAutoresizingMaskIntoConstraints = false
-        addChildViewController(viewController)
+        addChild(viewController)
         containerView.addSubview(viewController.view)
-        viewController.didMove(toParentViewController: self)
+        viewController.didMove(toParent: self)
         NSLayoutConstraint.constraints(withVisualFormat: "V:|[childView]|",
                                        options: [], metrics:nil,
                                        views: ["childView": viewController.view]).forEach { $0.isActive = true }

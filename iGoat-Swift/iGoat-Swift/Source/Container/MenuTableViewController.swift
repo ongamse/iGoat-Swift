@@ -14,7 +14,7 @@ class MenuTableViewController: UITableViewController {
         let aboutNib = UINib(nibName: "AboutCell", bundle: nil)
         tableView.register(aboutNib, forCellReuseIdentifier: AboutCell.identifier)
         tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
     }
 }
 
